@@ -1,0 +1,31 @@
+{
+    "movies": [
+        {
+            "id": "1",
+            "title": "Kingdom of the Planet of the Apes",
+            "overview": "Several generations in the future following Caesar's reign, apes are now the dominant species and live harmoniously while humans have been reduced to living in the shadows. As a new tyrannical ape leader builds his empire, one young ape undertakes a harrowing journey that will cause him to question all that he has known about the past and to make choices that will define a future for apes and humans alike.",
+            "backdrop_path" : "/fqv8v6AycXKsivp1T5yKtLbGXce.jpg",
+            "poster_path" : "/gKkl37BQuKTanygYQG1pyYgLVgf.jpg",
+            "vote_average" : 6.954,
+            "release_date": "2024-05-08"
+        },
+        {
+            "id": "2",
+            "title": "Civil War",
+            "overview": "In the near future, a group of war journalists attempt to survive while reporting the truth as the United States stands on the brink of civil war.",
+            "backdrop_path" : "/z121dSTR7PY9KxKuvwiIFSYW8cf.jpg",
+            "poster_path" : "/sh7Rg8Er3tFcN9BpKIPOMvALgZd.jpg",
+            "vote_average" : 7.137,
+            "release_date": "2024-04-10"
+        },
+        {
+            "id": "3",
+            "title": "Godzilla x Kong: The New Empire",
+            "overview": "Following their explosive showdown, Godzilla and Kong must reunite against a colossal undiscovered threat hidden within our world, challenging their very existence – and our own.",
+            "backdrop_path" : "/xRd1eJIDe7JHO5u4gtEYwGn5wtf.jpg",
+            "poster_path" : "/z1p34vh7dEOnLDmyCrlUVLuoDzd.jpg",
+            "vote_average" : 7.242,
+            "release_date": "2024-03-27"
+        }
+    ]
+}

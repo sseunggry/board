@@ -1,0 +1,66 @@
+@charset "UTF-8";
+@import "_variables.scss";
+
+//font
+html{
+  &[lang="ko-KR"], &[lang="ko"]{
+    font-family: $font-family-ko;
+  }
+  body{
+    font-size: $body-fz-pc;
+    font-weight: 400;
+    line-height: $line-height;
+    color: $base-color;
+
+    @media (max-width: 1080px) {
+      //font-size: $body-fz-mo;
+    }
+  }
+  &[lang="en"], *[lang="en"]{
+    font-family: $font-family-en;
+
+    body{
+      font-size: $body-fz-pc;
+      font-weight: 400;
+
+      @media (max-width: 1080px) {
+        //font-size: $body-fz-mo;
+      }
+    }
+  }
+}
+
+img{
+  width: 100%;
+}
+
+//color
+.c-red{
+  color: $c-red !important;
+}
+.c-white{
+    color: $c-white !important;
+}
+.c-blue{
+    color: $c-blue !important;
+}
+.c-indigo{
+    color: $c-indigo !important;
+}
+
+//font-style
+.bold{
+  font-weight: 700;
+}
+
+/* blind */
+.blind {
+  position: relative;
+  z-index: -1;
+  overflow: hidden;
+  width: 1px;
+  height: 1px;
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%);
+  border: 0;
+}

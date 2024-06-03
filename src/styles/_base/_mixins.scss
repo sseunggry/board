@@ -1,0 +1,31 @@
+@charset "UTF-8";
+
+@mixin font($family, $name, $type, $weight){
+  $url: '../../../public/resource/font/' + $name + '.' + $type;
+
+  font-family: $family;
+  src: url($url) format($type);
+  font-weight: $weight;
+}
+
+@mixin bg($url, $pos:center, $size:cover){
+  background: url('../../public/resource/images/'+ $url) no-repeat $pos / $size;
+}
+
+@mixin blind{
+  overflow: hidden;
+  border: 0;
+  position: relative;
+  z-index: -1;
+  width: 1px;
+  height: 1px;
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%);
+}
+
+@mixin ellipsis($line:2){
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: $line;
+  -webkit-box-orient: vertical;
+}
