@@ -1,19 +1,45 @@
-import {getMovies} from "../api/api";
+import {getMovies, getMovieData, URL_PATH} from "../api/api";
 import {useQuery} from "react-query";
 import {Link} from "react-router-dom";
-import {useState} from "react";
+import {useEffect, useRef, useState} from "react";
+import axios from "axios";
 
 export default function BoardList(){
     const [activeTab, setActiveTab] = useState('list');
-    const {data, isLoading} = useQuery(["movies"], () => getMovies());
+    const [data, setData] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+
+    const searchInput = useRef();
+    const [search, setSearch] = useState('');
+    const searchOnClick = () => {
+        setSearch(searchInput.current.value);
+    };
+
+    const getData = async () => {
+        try{
+            setIsLoading(true);
+            const { data } = await axios.get(`${URL_PATH}/movies`);
+            setData(data);
+
+            if(search) {
+                setData((prev) => prev.filter((el) => el.title.toLowerCase().includes(search.toLowerCase())));
+            }
+            setIsLoading(false);
+        } catch(e) {
+            console.log(e);
+        }
+    }
+    useEffect(() => {
+        getData();
+    }, [search]);
 
     return (
         <>
             <div className="sort-list-box">
                 <div className="search">
                     <label htmlFor="search"><span className="blind">검색</span></label>
-                    <input type="text" id="search" placeholder="검색" />
-                    <button type="button" className="icon_search"><span className="blind">검색</span></button>
+                    <input type="text" id="search" placeholder="검색" ref={searchInput} />
+                    <button type="button" className="icon_search" onClick={searchOnClick}><span className="blind">검색</span></button>
                 </div>
                 <div className="filter">
                     <label htmlFor="filter">필터</label>
@@ -33,26 +59,29 @@ export default function BoardList(){
                     </select>
                 </div>
             </div>
-            <ul className="view-mode">
-                <li
-                    className={activeTab === 'list' ? 'active' : ''}
-                    onClick={() => setActiveTab('list')}
-                >
-                    리스트형
-                </li>
-                <li
-                    className={activeTab === 'card' ? 'active' : ''}
-                    onClick={() => setActiveTab('card')}
-                >
-                    카드형
-                </li>
-            </ul>
+            <div className="btn-flex-box">
+                <ul className="view-mode">
+                    <li
+                        className={activeTab === 'list' ? 'active' : ''}
+                        onClick={() => setActiveTab('list')}
+                    >
+                        리스트형
+                    </li>
+                    <li
+                        className={activeTab === 'card' ? 'active' : ''}
+                        onClick={() => setActiveTab('card')}
+                    >
+                        카드형
+                    </li>
+                </ul>
+                <Link to="/board/new" className="btn btn-write">글쓰기</Link>
+            </div>
             {isLoading ? 'Loading' : (
                 <div className={activeTab === 'list' ? 'board-list' : activeTab === 'card' ? 'board-card' : ''}>
-                    {data.map(({id, title, overview, backdrop_path, poster_path, vote_average, release_date}, idx) => (
+                    {data && data.map(({id, title, content, backdrop_path, poster_path, vote_average, release_date}, idx) => (
                         <Link to={`/board/${id}`} className="item" key={id}>
                             <p className="title">{title}</p>
-                            <p className="overview">{overview}</p>
+                            <p className="overview">{content}</p>
                             <p className="date">{release_date}</p>
                         </Link>
                     ))}

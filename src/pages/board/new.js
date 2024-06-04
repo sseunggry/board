@@ -1,7 +1,11 @@
+import BoardForm from "../../components/BoardForm";
+
 export default function BoardNew() {
     return (
         <>
-            new
+            <section className="contents">
+                <BoardForm />
+            </section>
         </>
     )
 }
