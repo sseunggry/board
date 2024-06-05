@@ -75,7 +75,7 @@ export default function Comment(){
         const targetId = e.target.parentNode.parentNode.id;
         navigate(`/board/${params.id}/${targetId}`);
 
-        let targetText = comment.filter((el) => el.id === targetId);
+        let targetText = comment.filter((el) => el.id == targetId);
         setEditComment(...targetText);
         setInputText(targetText[0]?.text);
     }
