@@ -4,17 +4,17 @@
 
 $fonts-ko: (Thin:100, Light:300, DemiLight: 350, Regular: 400, Medium: 500, Bold: 700, Black: 900);
 $fonts-en: (Thin:100, Light:300, Regular: 400, Medium: 500, Bold: 700, Black: 900);
-
-@each $font, $weight in $fonts-ko{
-  @font-face{
-    @include font('Noto Sans KR', 'NotoSansKR-#{$font}', 'woff2', #{$weight});
-    font-style: normal;
-  }
-}
-
-@each $font, $weight in $fonts-en{
-  @font-face{
-    @include font('Roboto', 'Roboto-#{$font}', 'ttf', #{$weight});
-    font-style: normal;
-  }
-}
+//
+//@each $font, $weight in $fonts-ko{
+//  @font-face{
+//    @include font('Noto Sans KR', 'NotoSansKR-#{$font}', 'woff2', #{$weight});
+//    font-style: normal;
+//  }
+//}
+//
+//@each $font, $weight in $fonts-en{
+//  @font-face{
+//    @include font('Roboto', 'Roboto-#{$font}', 'ttf', #{$weight});
+//    font-style: normal;
+//  }
+//}
