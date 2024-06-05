@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {URL_PATH} from "../api/api";
+import {BASE_PATH} from "../api/api";
 import axios from "axios";
 import {useNavigate, useParams} from "react-router-dom";
 
@@ -12,7 +12,7 @@ export default function BoardFormEdit(){
 
     const putData = async () => {
         try{
-            const { data } = await axios.put(`${URL_PATH}/movies/${params.id}`, editData);
+            const { data } = await axios.put(`${BASE_PATH}/movies/${params.id}`, editData);
             setEditData(data);
         } catch(e) {
             console.log(e);
@@ -20,7 +20,7 @@ export default function BoardFormEdit(){
     }
     const getData = async () => {
         try{
-            const { data } = await axios.get(`${URL_PATH}/movies/${params.id}`);
+            const { data } = await axios.get(`${BASE_PATH}/movies/${params.id}`);
             setTitle(data.title);
             setContent(data.content);
             setEditData(data);

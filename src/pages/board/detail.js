@@ -1,6 +1,6 @@
 import {Link, useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
-import {URL_PATH} from "../../api/api";
+import {BASE_PATH} from "../../api/api";
 import axios from "axios";
 import Comment from "../../components/Comment";
 
@@ -13,7 +13,7 @@ export default function BoardDetail() {
     const getData = async () => {
         try{
             setIsLoading(true);
-            const { data } = await axios.get(`${URL_PATH}/movies/${params.id}`);
+            const { data } = await axios.get(`${BASE_PATH}/movies/${params.id}`);
             setData(data);
             setIsLoading(false);
         } catch(e) {
@@ -22,8 +22,7 @@ export default function BoardDetail() {
     }
     const deleteData = async () => {
         try{
-            const { data } = await axios.delete(`${URL_PATH}/movies/${params.id}`);
-            setData(data);
+            await axios.delete(`${BASE_PATH}/movies/${params.id}`);
         } catch(e) {
             console.log(e);
         }
@@ -44,7 +43,7 @@ export default function BoardDetail() {
                     <div className="item">
                         <p className="title">{data?.title}</p>
                         <p className="overview">{data?.content}</p>
-                        {data?.release_date && <p className="date">{data?.release_date}</p>}
+                        {data?.date && <p className="date">{data?.date}</p>}
                         {data?.btn && (
                             <div className="btn-box">
                                 <Link to={`/board/edit/${data?.id}`} className="btn-text">수정</Link>
@@ -59,7 +58,7 @@ export default function BoardDetail() {
                     </div>
                 )}
             </div>
-            <Comment />
+            <Comment id={params.id} />
             <Link to="/board" className="btn btn-page btn-list">목록으로</Link>
         </section>
     )

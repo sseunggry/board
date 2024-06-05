@@ -1,5 +1,4 @@
-import {getMovies, getMovieData, URL_PATH} from "../api/api";
-import {useQuery} from "react-query";
+import {BASE_PATH} from "../api/api";
 import {Link} from "react-router-dom";
 import {useEffect, useRef, useState} from "react";
 import axios from "axios";
@@ -18,9 +17,9 @@ export default function BoardList(){
     const getData = async () => {
         try{
             setIsLoading(true);
-            const { data } = await axios.get(`${URL_PATH}/movies`);
-            setData(data);
+            const { data } = await axios.get(`${BASE_PATH}/movies`);
 
+            setData(data);
             if(search) {
                 setData((prev) => prev.filter((el) => el.title.toLowerCase().includes(search.toLowerCase())));
             }
@@ -29,6 +28,20 @@ export default function BoardList(){
             console.log(e);
         }
     }
+
+    const onChangeSortSelect = (e) => {
+        const { value } = e.target;
+
+        if(value === 'dateLasted'){
+            const sortData = [...data].sort((a, b) => Number(b.date.replace(/[^0-9]/g, '')) - Number(a.date.replace(/[^0-9]/g, '')))
+            setData(sortData);
+        }
+        if(value === 'dateLate'){
+            const sortData = [...data].sort((a, b) => Number(a.date.replace(/[^0-9]/g, '')) - Number(b.date.replace(/[^0-9]/g, '')))
+            setData(sortData);
+        }
+    }
+
     useEffect(() => {
         getData();
     }, [search]);
@@ -41,21 +54,12 @@ export default function BoardList(){
                     <input type="text" id="search" placeholder="검색" ref={searchInput} />
                     <button type="button" className="icon_search" onClick={searchOnClick}><span className="blind">검색</span></button>
                 </div>
-                <div className="filter">
-                    <label htmlFor="filter">필터</label>
-                    <select name="filter" id="filter">
-                        <option value="openDate">개봉일</option>
-                        <option value="rate">평점</option>
-                        <option value="country">나라</option>
-                    </select>
-                </div>
-                <div className="align">
-                    <label htmlFor="align">정렬</label>
-                    <select name="align" id="align">
-                        <option value="openDateLasted">개봉일 빠른 순</option>
-                        <option value="openDateLate">개봉일 늦은 순</option>
-                        <option value="rateHigh">평점 높은 순</option>
-                        <option value="rateLow">평점 낮은 순</option>
+                <div className="sort">
+                    <label htmlFor="sort"><span className="blind">정렬</span></label>
+                    <select name="sort" id="sort" onChange={onChangeSortSelect}>
+                        <option value="default">정렬 선택</option>
+                        <option value="dateLasted">최신 순</option>
+                        <option value="dateLate">오래된 순</option>
                     </select>
                 </div>
             </div>
@@ -78,11 +82,12 @@ export default function BoardList(){
             </div>
             {isLoading ? 'Loading' : (
                 <div className={activeTab === 'list' ? 'board-list' : activeTab === 'card' ? 'board-card' : ''}>
-                    {data && data.map(({id, title, content, backdrop_path, poster_path, vote_average, release_date}, idx) => (
+                    {search && data.length === 0 ? <p className="no-data">검색 결과가 없습니다.</p> : ''}
+                    {data && data.map(({id, title, content, backdrop_path, date}) => (
                         <Link to={`/board/${id}`} className="item" key={id}>
                             <p className="title">{title}</p>
                             <p className="overview">{content}</p>
-                            <p className="date">{release_date}</p>
+                            <p className="date">{date}</p>
                         </Link>
                     ))}
                 </div>

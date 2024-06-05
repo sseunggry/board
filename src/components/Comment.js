@@ -1,46 +1,46 @@
 import {useEffect, useState} from "react";
-import {URL_PATH} from "../api/api";
+import {BASE_PATH} from "../api/api";
 import axios from "axios";
-import {useParams} from "react-router-dom";
+import {popupClose, popupOpen} from "../js/commonFn";
+import {useNavigate, useParams} from "react-router-dom";
 
 export default function Comment(){
     const params = useParams();
-    const [comment, setComment] = useState();
+    const navigate = useNavigate();
+    const [comment, setComment] = useState([]);
     const [newComment, setNewComment] = useState();
     const [editComment, setEditComment] = useState();
-    const [input, setInput] = useState();
+    const [input, setInput] = useState('');
+    const [inputText, setInputText] = useState('');
+    const [deleteBtn, setDeleteBtn] = useState(0);
 
     const getData = async () => {
         try{
-            const { data } = await axios.get(`${URL_PATH}/comment`);
-            if(data){
-                setComment(data?.filter((el) => el.sort === params.id));
-            }
-            // setEditComment(data.text);
+            const { data } = await axios.get(`${BASE_PATH}/comment`);
+            setComment(data?.filter((el) => el.sort === params.id));
         } catch(e){
             console.log(e);
         }
     }
-
     const postData = async (newData) => {
         try{
-            const { data } = await axios.post(`${URL_PATH}/comment`, newData);
-            setNewComment(data);
+            const { data } = await axios.post(`${BASE_PATH}/comment`, newData);
+            setComment((prev) => [...prev, data]);
         } catch(e) {
             console.log(e);
         }
     }
     const putData = async (targetId) => {
         try{
-            const { data } = await axios.put(`${URL_PATH}/comment/${targetId}`, editComment);
-            // setEditComment(data);
+            const { data } = await axios.put(`${BASE_PATH}/comment/${targetId}`, editComment);
+            setEditComment(data);
         } catch(e) {
             console.log(e);
         }
     }
     const deleteData = async (targetId) => {
         try{
-            await axios.delete(`${URL_PATH}/comment/${targetId}`);
+            await axios.delete(`${BASE_PATH}/comment/${targetId}`);
         } catch(e) {
             console.log(e);
         }
@@ -50,26 +50,39 @@ export default function Comment(){
         const {value, name} = e.target;
 
         setNewComment({
-            sort: params.id,
-            id : params.id+input,
+            ...newComment,
+            "sort": params.id,
             [name] : value,
             "btn" : true
         });
         setInput(value);
     }
 
-    const onClickModify = (e) => {
-        const commentInput = e.target.parentNode.previousSibling;
-        const targetId = e.target.parentNode.parentNode.id;
+    const onChangeModify = (e) => {
+        const {value, name} = e.target;
 
-        commentInput.readOnly = false;
-        commentInput.focus();
-        putData(targetId);
+        setEditComment({
+           ...editComment,
+            "sort": params.id,
+           [name] : value,
+            "btn" : true
+        });
+        setInputText(value);
+    }
+
+    const onClickModify = (e) => {
+        popupOpen('popCommentModify');
+        const targetId = e.target.parentNode.parentNode.id;
+        navigate(`/board/${params.id}/${targetId}`);
+
+        let targetText = comment.filter((el) => el.id === targetId);
+        setEditComment(...targetText);
+        setInputText(targetText[0]?.text);
     }
 
     const onClickDelete = (e) => {
-        e.preventDefault();
         const targetId = e.target.parentNode.parentNode.id;
+        setDeleteBtn((prev) => (prev+1));
         deleteData(targetId);
     }
 
@@ -79,9 +92,15 @@ export default function Comment(){
         setInput('');
     }
 
+    const onClickCommentModify = (e) => {
+        putData(params.commentId);
+        popupClose(e);
+        navigate(`/board/${params.id}`);
+    }
+
     useEffect(() => {
         getData();
-    }, [newComment, comment]);
+    }, [editComment, deleteBtn]);
 
     return (
         <>
@@ -95,9 +114,8 @@ export default function Comment(){
                 </form>
                 <div className="comment-list">
                     {comment && comment?.map((el, idx) => (
-                        <div className="comment-box" key={idx} id={el.id}>
-                            <input type="text" className="text" value={el?.text} readOnly />
-                            {/*<p className="text">{el.text}</p>*/}
+                        <div className="comment-box" key={idx} id={el.id} >
+                            <p className="text">{el.text}</p>
                             {el.btn && (
                                 <div className="btn-box">
                                     <button type="button" className="btn-text" onClick={onClickModify}>수정</button>
@@ -106,6 +124,16 @@ export default function Comment(){
                             )}
                         </div>
                     ))}
+                </div>
+            </div>
+            <div className="popup-wrap" data-pop="popCommentModify">
+                <div className="popup-inner">
+                    <div className="popup-con">
+                        <input type="text" className="input-text" name="text" value={inputText} onChange={onChangeModify} />
+                        <div className="popup-btn">
+                            <button type="button" className="btn" onClick={onClickCommentModify}>수정</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </>

@@ -16,6 +16,7 @@
     "react-query": "^3.39.3",
     "react-router-dom": "^6.23.1",
     "react-scripts": "5.0.1",
+    "recoil": "^0.7.7",
     "web-vitals": "^2.1.0"
   },
   "scripts": {
@@ -23,7 +24,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "dev" : "concurrently \"npm run start\" \"json-server ./data/data.json --port 3001\""
+    "dev": "concurrently \"npm run start\" \"json-server ./data/data.json --port 3001\""
   },
   "eslintConfig": {
     "extends": [
